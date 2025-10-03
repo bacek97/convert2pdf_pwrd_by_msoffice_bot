@@ -43,10 +43,21 @@ while ($true) {
         $fileName = $json.message.document.file_name
 
         if (-not $fileId) {
-            $response.StatusCode = 200
-            $response.Close()
-            continue
-        }
+		    # Пользователь прислал не документ
+		    $text = "Please send .doc .docx .ppt .pptx"
+
+		    Invoke-RestMethod -Uri "https://api.telegram.org/bot$BotToken/sendMessage" `
+		                      -Method Post `
+		                      -ContentType "application/json" `
+		                      -Body (@{
+		                          chat_id = $json.message.chat.id
+		                          text    = $text
+		                      } | ConvertTo-Json -Depth 2)
+
+		    $response.StatusCode = 200
+		    $response.Close()
+		    continue
+		}
 
         Write-Host "📥 Получен файл: $fileName от пользователя $chatId"
 
@@ -133,3 +144,4 @@ $content.Add($fileContent)
         } catch {}
     }
 }
+
