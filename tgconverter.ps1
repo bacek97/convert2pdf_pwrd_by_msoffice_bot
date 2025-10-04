@@ -1,7 +1,7 @@
-﻿chcp 65001
+# WTFPL ChatGPT-4-turbo
 
 # === НАСТРОЙКИ ===
-$BotToken = "8125458267:AAHE7iOtZRFHvhAurP2aJnxSsL-Kn7Iu0Jo"  # ← ВСТАВЬ сюда токен своего Telegram-бота
+$BotToken = "8125458267:AAHE7iOtZRFHvhAurP2aJnxSsL-Kn7Iu0Jo"  # ← токен Telegram-бота
 $Port = 80
 
 # === ПУТИ ===
@@ -98,17 +98,17 @@ while ($true) {
 
         # Добавляем PDF файл
         $fileStream = [System.IO.File]::OpenRead($convertedFile)
-$fileContent = New-Object System.Net.Http.StreamContent($fileStream)
-$fileContent.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse("application/pdf")
+		$fileContent = New-Object System.Net.Http.StreamContent($fileStream)
+		$fileContent.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse("application/pdf")
+		
+		# Назначаем имя вручную
+		$contentDisposition = New-Object System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
+		$contentDisposition.Name = '"document"'
+		$contentDisposition.FileName = '"document.pdf"'  # ← Жёстко заданное имя
+		$fileContent.Headers.ContentDisposition = $contentDisposition
 
-# Назначаем имя вручную
-$contentDisposition = New-Object System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
-$contentDisposition.Name = '"document"'
-$contentDisposition.FileName = '"document.pdf"'  # ← Жёстко заданное имя
-$fileContent.Headers.ContentDisposition = $contentDisposition
-
-# Добавляем в запрос
-$content.Add($fileContent)
+		# Добавляем в запрос
+		$content.Add($fileContent)
         # Отправка
         $tgResponse = $httpClient.PostAsync($sendFileUrl, $content).Result
 
@@ -144,4 +144,5 @@ $content.Add($fileContent)
         } catch {}
     }
 }
+
 
