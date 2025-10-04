@@ -1,4 +1,6 @@
-﻿param(
+# WTFPL ChatGPT-4-turbo
+
+ param(
     [Parameter(Mandatory = $true)][string]$InputFile,
     [Parameter(Mandatory = $true)][string]$OutputFile
 )
@@ -57,3 +59,4 @@ if ($ext -eq ".doc" -or $ext -eq ".docx") {
     Write-Host "❌ Неподдерживаемый формат: $ext"
     exit 1
 }
+
